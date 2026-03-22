@@ -110,13 +110,6 @@ export default function MyPage() {
     loadDashboard();
   }, [user, profile]);
 
-  // ルームの存在確認（存在しないIDのSetを返す）
-  const getDeletedRoomIds = async (roomIds: string[]): Promise<Set<string>> => {
-    const unique = [...new Set(roomIds)];
-    const snaps = await Promise.all(unique.map((id) => getDoc(doc(db, "rooms", id))));
-    return new Set(unique.filter((_, i) => !snaps[i].exists()));
-  };
-
   // Load topics（savedTopics サブコレクションから取得）
   useEffect(() => {
     if (!user || activeTab !== "topics" || topicsLoaded) return;
@@ -126,15 +119,7 @@ export default function MyPage() {
         orderBy("savedAt", "desc")
       );
       const snap = await getDocs(q);
-      const all = snap.docs.map((d) => ({ docId: d.id, ...(d.data() as SavedTopic) }));
-      const deletedIds = await getDeletedRoomIds(all.map((t) => t.roomId));
-      // 削除済みルームのトピックをFirestoreから除去
-      await Promise.all(
-        snap.docs
-          .filter((d) => deletedIds.has((d.data() as SavedTopic).roomId))
-          .map((d) => deleteDoc(doc(db, "users", user.uid, "savedTopics", d.id)))
-      );
-      setMyTopics(all.filter((t) => !deletedIds.has(t.roomId)));
+      setMyTopics(snap.docs.map((d) => d.data() as SavedTopic));
       setTopicsLoaded(true);
     };
     loadTopics();
@@ -149,14 +134,7 @@ export default function MyPage() {
         orderBy("viewedAt", "desc")
       );
       const snap = await getDocs(q);
-      const all = snap.docs.map((d) => d.data() as ViewedTopic);
-      const deletedIds = await getDeletedRoomIds(all.map((t) => t.roomId));
-      await Promise.all(
-        snap.docs
-          .filter((d) => deletedIds.has((d.data() as ViewedTopic).roomId))
-          .map((d) => deleteDoc(doc(db, "users", user.uid, "viewedTopics", d.id)))
-      );
-      setViewedTopics(all.filter((t) => !deletedIds.has(t.roomId)));
+      setViewedTopics(snap.docs.map((d) => d.data() as ViewedTopic));
       setViewedLoaded(true);
     };
     load();
@@ -171,14 +149,7 @@ export default function MyPage() {
         orderBy("savedAt", "desc")
       );
       const snap = await getDocs(q);
-      const all = snap.docs.map((d) => d.data() as BookmarkedMessage);
-      const deletedIds = await getDeletedRoomIds(all.map((b) => b.roomId));
-      await Promise.all(
-        snap.docs
-          .filter((d) => deletedIds.has((d.data() as BookmarkedMessage).roomId))
-          .map((d) => deleteDoc(doc(db, "users", user.uid, "bookmarks", d.id)))
-      );
-      setBookmarks(all.filter((b) => !deletedIds.has(b.roomId)));
+      setBookmarks(snap.docs.map((d) => d.data() as BookmarkedMessage));
       setBookmarksLoaded(true);
     };
     loadBookmarks();

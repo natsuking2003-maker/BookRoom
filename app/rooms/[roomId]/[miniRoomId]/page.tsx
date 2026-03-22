@@ -23,6 +23,8 @@ export default function ChatPage() {
 
   const [room, setRoom]         = useState<Room | null>(null);
   const [miniRoom, setMiniRoom] = useState<MiniRoom | null>(null);
+  const [roomDeleted, setRoomDeleted]       = useState(false);
+  const [miniRoomDeleted, setMiniRoomDeleted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText]         = useState("");
   const [sending, setSending]   = useState(false);
@@ -48,12 +50,15 @@ export default function ChatPage() {
   useEffect(() => {
     getDoc(doc(db, "rooms", roomId)).then((snap) => {
       if (snap.exists()) setRoom({ id: snap.id, ...snap.data() } as Room);
+      else setRoomDeleted(true);
     });
     getDoc(doc(db, "rooms", roomId, "miniRooms", miniRoomId)).then((snap) => {
       if (snap.exists()) {
         const mr = { id: snap.id, ...snap.data() } as MiniRoom;
         setMiniRoom(mr);
         localStorage.setItem(`visit_${miniRoomId}`, String(mr.messageCount ?? 0));
+      } else {
+        setMiniRoomDeleted(true);
       }
     });
 
@@ -208,7 +213,8 @@ export default function ChatPage() {
     }
   };
 
-  const canSend = !sending && (text.trim().length > 0 || !!imageFile);
+  const isDeleted = roomDeleted || miniRoomDeleted;
+  const canSend = !sending && !isDeleted && (text.trim().length > 0 || !!imageFile);
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
@@ -277,8 +283,16 @@ export default function ChatPage() {
         <div ref={bottomRef} />
       </div>
 
+      {/* 削除済みバナー */}
+      {isDeleted && (
+        <div className="flex-shrink-0 bg-red-50 border border-red-200 rounded-xl p-4 text-center text-sm text-red-600 mb-2">
+          ⚠️ {roomDeleted ? "このルームは削除されました。" : "このトピックは削除されました。"}
+          過去のメッセージは閲覧できますが、新しいメッセージは送信できません。
+        </div>
+      )}
+
       {/* 入力エリア */}
-      {user ? (
+      {user && !isDeleted ? (
         <div className="flex-shrink-0 space-y-2">
           {/* アップロードエラー表示 */}
           {uploadError && (
@@ -343,7 +357,7 @@ export default function ChatPage() {
             </button>
           </div>
         </div>
-      ) : (
+      ) : !isDeleted ? (
         <div className="flex-shrink-0 bg-white rounded-xl shadow p-4 text-center">
           <p className="text-sm text-gray-500 mb-3">メッセージを送るにはログインが必要です</p>
           <div className="flex justify-center gap-3">
@@ -355,7 +369,7 @@ export default function ChatPage() {
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
