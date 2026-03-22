@@ -450,7 +450,10 @@ export default function MyPage() {
           {!bookmarksLoaded ? (
             <p className="text-center text-gray-400 py-8">読み込み中...</p>
           ) : bookmarks.length === 0 ? (
-            <p className="text-center text-gray-400 py-8">ブックマークがありません</p>
+            <div className="text-center py-8">
+            <p className="text-gray-400 mb-1">ブックマークがありません</p>
+            <p className="text-sm text-gray-300">チャット内のメッセージをブックマークしてみましょう</p>
+          </div>
           ) : (
             bookmarks.map((bm) => (
               <div key={bm.id} className="bg-white rounded-xl shadow p-4">
