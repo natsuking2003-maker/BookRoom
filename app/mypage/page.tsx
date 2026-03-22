@@ -221,9 +221,14 @@ export default function MyPage() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* ヘッダー */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">マイページ</h1>
-        <p className="text-sm text-gray-500">{profile?.displayName ?? "ユーザー"} さん</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">マイページ</h1>
+          <p className="text-sm text-gray-500">{profile?.displayName ?? "ユーザー"} さん</p>
+        </div>
+        <Link href="/" className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg transition">
+          ← ホーム
+        </Link>
       </div>
 
       {/* タブ */}
