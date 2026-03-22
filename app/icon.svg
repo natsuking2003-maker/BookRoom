@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 背景：インディゴ -->
+  <rect width="32" height="32" rx="7" fill="#4F46E5"/>
+
+  <!-- 左ページ -->
+  <path d="M4 11 C4 10.5 5 10 6 10 L14.5 11 L14.5 23 L6 22 C5 22 4 21.5 4 21 Z" fill="white"/>
+
+  <!-- 右ページ -->
+  <path d="M28 11 C28 10.5 27 10 26 10 L17.5 11 L17.5 23 L26 22 C27 22 28 21.5 28 21 Z" fill="white"/>
+
+  <!-- 中央の綴じ目 -->
+  <path d="M14.5 11 Q16 9.5 17.5 11 L17.5 23 Q16 24.5 14.5 23 Z" fill="#818CF8"/>
+
+  <!-- 左ページの罫線 -->
+  <line x1="6.5" y1="14" x2="12.5" y2="14" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="6.5" y1="16.5" x2="12.5" y2="16.5" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="6.5" y1="19" x2="12.5" y2="19" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- 右ページの罫線 -->
+  <line x1="19.5" y1="14" x2="25.5" y2="14" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="19.5" y1="16.5" x2="25.5" y2="16.5" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="19.5" y1="19" x2="25.5" y2="19" stroke="#A5B4FC" stroke-width="1.2" stroke-linecap="round"/>
+</svg>
