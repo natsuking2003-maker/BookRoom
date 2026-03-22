@@ -198,7 +198,7 @@ export default function MyPage() {
     });
   };
 
-  const handleToggleSolved = async (topic: MiniRoomWithRoom) => {
+  const handleToggleSolved = async (topic: SavedTopic) => {
     const newSolved = !topic.solved;
     await updateDoc(doc(db, "rooms", topic.roomId, "miniRooms", topic.id), { solved: newSolved });
     setMyTopics((prev) =>

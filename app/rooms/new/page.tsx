@@ -220,7 +220,7 @@ export default function NewRoomPage() {
     let baseQuery = "";
     for (let i = categoryPath.length - 1; i >= 0; i--) {
       if (categoryPath[i].searchQuery) {
-        baseQuery = categoryPath[i].searchQuery;
+        baseQuery = categoryPath[i].searchQuery ?? "";
         break;
       }
     }
