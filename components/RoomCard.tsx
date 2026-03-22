@@ -9,9 +9,10 @@ import { db } from "@/lib/firebase";
 
 interface Props {
   room: Room;
+  presenceCount?: number;
 }
 
-export default function RoomCard({ room }: Props) {
+export default function RoomCard({ room, presenceCount = 0 }: Props) {
   const { user, profile, toggleFavorite } = useAuth();
   const isFavorite = profile?.favorites?.includes(room.id) ?? false;
 
@@ -50,6 +51,14 @@ export default function RoomCard({ room }: Props) {
           {room.description && (
             <p className="text-xs text-gray-400 mt-1 line-clamp-2">{room.description}</p>
           )}
+          {/* 在席人数 */}
+          {presenceCount > 0 && (
+            <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block" />
+              {presenceCount}人が閲覧中
+            </p>
+          )}
+
           {/* タグ */}
           {room.tags && room.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">

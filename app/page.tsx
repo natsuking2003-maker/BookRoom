@@ -8,6 +8,7 @@ import { Room, PREDEFINED_TAGS } from "@/lib/types";
 import { CATEGORY_TREE, CategoryNode } from "@/lib/categories";
 import RoomCard from "@/components/RoomCard";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAllRoomPresenceCounts } from "@/hooks/usePresence";
 
 type SortKey    = "newest" | "popular";
 type SearchMode = "text" | "category";
@@ -28,6 +29,7 @@ const CATEGORY_TAG_MAP: Record<string, string> = {
 
 export default function HomePage() {
   const { user, profile } = useAuth();
+  const presenceCounts = useAllRoomPresenceCounts();
   const [rooms,   setRooms]   = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [sort,    setSort]    = useState<SortKey>("newest");
@@ -210,7 +212,7 @@ export default function HomePage() {
           <h2 className="text-base font-semibold text-gray-700 mb-3">⭐ お気に入り</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {favoriteRooms.map((room) => (
-              <RoomCard key={room.id} room={room} />
+              <RoomCard key={room.id} room={room} presenceCount={presenceCounts[room.id] ?? 0} />
             ))}
           </div>
         </div>
@@ -473,7 +475,7 @@ export default function HomePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map((room) => (
-            <RoomCard key={room.id} room={room} />
+            <RoomCard key={room.id} room={room} presenceCount={presenceCounts[room.id] ?? 0} />
           ))}
         </div>
       )}

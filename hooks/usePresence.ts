@@ -5,6 +5,26 @@ import { ref, onValue, onDisconnect, set, remove } from "firebase/database";
 import { rtdb } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 
+/** 全ルームの在席人数を一括取得（ホームページ用） */
+export function useAllRoomPresenceCounts(): Record<string, number> {
+  const [counts, setCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const presenceRef = ref(rtdb, "presence/r");
+    const unsubscribe = onValue(presenceRef, (snap) => {
+      const data = snap.val() ?? {};
+      const result: Record<string, number> = {};
+      Object.entries(data).forEach(([roomId, users]) => {
+        result[roomId] = Object.keys(users as object).length;
+      });
+      setCounts(result);
+    });
+    return unsubscribe;
+  }, []);
+
+  return counts;
+}
+
 /**
  * Firebase Realtime Database を使ったリアルタイム在席カウント
  * presencePath: 例 "presence/r/roomId123" や "presence/m/miniRoomId456"
