@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "presence": {
+      ".read": true,
+      "r": {
+        "$roomId": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      },
+      "m": {
+        "$miniRoomId": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      }
+    }
+  }
+}

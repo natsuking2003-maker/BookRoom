@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "messages",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "userId",    "order": "ASCENDING"  },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "miniRooms",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "createdBy", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
